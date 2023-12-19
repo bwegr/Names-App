@@ -150,12 +150,52 @@ st.pyplot(fig)
 
 # Q6
 st.markdown("### **Who generates the fastest replies?**")
+num_users6 = st.slider("Select the number of top users to display", 1, 20, 10, key="q6")
+reply3 = data[['parent_user_id', 'thread_ts', 'ts']].dropna()
+reply3['reply_time'] = (reply3['thread_ts'] - reply3['ts']) / 60 * -1
+reply3 = reply3.groupby('parent_user_id')['reply_time'].mean().reset_index().sort_values(by='reply_time', ascending=True)
+reply3.rename(columns={'parent_user_id': 'user', 'reply_time': 'avg_reply_time'}, inplace=True)
+reply3a = pd.merge(reply3, users[['id', 'real_name']], left_on='user', right_on='id', how='left').dropna()
+reply3a['real_name'] = reply3a['real_name'].astype(str)
+reply3a['avg_reply_time'] = round(reply3a['avg_reply_time'], 2)
+paired = sorted(zip(reply3a['avg_reply_time'][0:num_users6], reply3a['real_name'][0:num_users6]), reverse=True)
+count_s, user_s = zip(*paired)
 
-
+fig, ax = plt.subplots()
+ax.barh(user_s, count_s)
+for index, value in enumerate(count_s):
+    ax.text(value, index, str(value), va='center')
+ax.set_xlabel('Avg Reply Time in Minutes')
+ax.set_ylabel('Name')
+ax.set_title('Top Fastest Reply Generators (Oct 2023)')
+st.pyplot(fig)
 
 # Q7
 st.markdown("### **What kind of networks exist among replies?**")
+fig_size = st.slider("Select the figure size for the network graph", 5, 20, 12, key="q7")
+replynet = data[['user', 'parent_user_id']].dropna().reset_index()[['user', 'parent_user_id']].drop_duplicates()
+replynet = replynet[replynet['user'] != replynet['parent_user_id']]
+replynet = pd.merge(replynet, users[['id', 'real_name']], left_on='user', right_on='id', how='left').dropna()
+replynet.rename(columns={'real_name': 'reply_name'}, inplace=True)
+replynet = pd.merge(replynet.drop('id', axis=1), users[['id', 'real_name']], left_on='parent_user_id', right_on='id', how='left').dropna()
+replynet.rename(columns={'real_name': 'parent_name'}, inplace=True)
+replynet['reply_name'] = replynet['reply_name'].astype(str)
+replynet['parent_name'] = replynet['parent_name'].astype(str)
+replynet = replynet[['parent_name', 'reply_name']]
 
+G = nx.Graph()
+for _, row in replynet.iterrows():
+    user, parent_user = row['reply_name'], row['parent_name']
+    G.add_node(user)
+    G.add_node(parent_user)
+    G.add_edge(user, parent_user)
+
+fig, ax = plt.subplots(figsize=(fig_size, fig_size))
+pos = nx.kamada_kawai_layout(G)  # You can experiment with different layouts
+nx.draw(G, pos, ax=ax, node_size=150, font_size=3, font_color="red", node_color="blue", alpha=1)
+label_pos = {key: [value[0], value[1]-0.04] for key, value in pos.items()}  # Adjust label positions
+nx.draw_networkx_labels(G, label_pos, ax=ax, font_size=6, font_color="red")
+st.pyplot(fig)
 
 
 
