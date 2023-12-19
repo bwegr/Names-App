@@ -75,6 +75,7 @@ for index, value in enumerate(count_s):
 ax.set_ylabel('Emoji')
 ax.set_title('Top Emojis')
 st.pyplot(fig)
+st.dataframe(react1a)
 
 # Q3
 st.markdown("### **Who generates the most reactions?**")
