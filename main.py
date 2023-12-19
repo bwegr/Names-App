@@ -9,7 +9,7 @@ from pandas import json_normalize
 
 # Data extraction
 data = pd.read_csv("https://raw.githubusercontent.com/bwegr/stat386project/main/all.csv")
-users = pd.read_csv("https://raw.githubusercontent.com/bwegr/stat386project/main/all.csv")
+users = pd.read_csv("https://raw.githubusercontent.com/bwegr/stat386project/main/users.csv")
 
 # Function definitions
 def num_and_sum(s):
