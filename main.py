@@ -27,10 +27,11 @@ def convert_string_to_dict(s):
     return result
 
 # Streamlit App
-st.title("Top Reactors Visualization")
+st.title("BYU MBA Slack Data")
 
+st.write("The visualizations below correspond to all communication in public channels of the BYU MBA Slack workspace during the month of October 2023. Use the sliders to change how many of the top users for each category you wish to see")
 # User input for the number of top users
-num_users = st.slider("Select the number of top users to display", 1, 20, 10)
+num_users1 = st.slider("Select the number of top users to display", 1, 50, 10)
 
 # Processing
 react1 = pd.DataFrame(data[data['reactions'].notna()][['user', 'reactions']])
@@ -50,7 +51,7 @@ react2b = pd.merge(react2, users[['id', 'real_name']], left_on='users', right_on
 
 # Visualization
 react2a = react2b[['real_name', 'count']].groupby('real_name').count().reset_index().sort_values(by='count', ascending=False)
-paired = sorted(zip(react2a['count'][0:num_users], react2a['real_name'][0:num_users]))
+paired = sorted(zip(react2a['count'][0:num_users1], react2a['real_name'][0:num_users1]))
 count_s, users_s = zip(*paired)
 
 fig, ax = plt.subplots()
