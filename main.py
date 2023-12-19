@@ -76,11 +76,10 @@ for index, value in enumerate(count_s):
 ax.set_ylabel('Emoji')
 ax.set_title('Top Emojis')
 st.pyplot(fig)
-st.dataframe(react1a)
 
 # Q3
 st.markdown("### **Who generates the most reactions?**")
-num_users2 = st.slider("Select the number of top users to display", 1, 20, 10, key="q3a")
+num_users2 = st.slider("Select the number of top users to display", 1, 30, 10, key="q3a")
 react1b = pd.merge(react1a, users[['id', 'real_name']], left_on='user', right_on='id', how='left')
 react1c = react1b.sort_values(by='sum_counts', ascending=False)
 paired = sorted(zip(react1c['sum_counts'][0:num_users2], react1c['real_name'][0:num_users2]))
@@ -116,7 +115,7 @@ st.pyplot(fig)
 
 # Q4
 st.markdown("### **Who replies to messages most?**")
-num_users4 = st.slider("Select the number of top users to display", 1, 20, 10, key="q4")
+num_users4 = st.slider("Select the number of top users to display", 1, 30, 10, key="q4")
 reply = data[['user', 'parent_user_id']].dropna().groupby('user').count().reset_index().sort_values(by='parent_user_id', ascending=False)
 reply.rename(columns={'parent_user_id': 'reply_count'}, inplace=True)
 reply1 = pd.merge(reply, users[['id', 'real_name']], left_on='user', right_on='id', how='left')
@@ -133,7 +132,7 @@ st.pyplot(fig)
 
 # Q5
 st.markdown("### **Who generates the most replies?**")
-num_users5 = st.slider("Select the number of top users to display", 1, 20, 10, key="q5")
+num_users5 = st.slider("Select the number of top users to display", 1, 30, 10, key="q5")
 reply2 = data[['parent_user_id', 'ts']].dropna().groupby('parent_user_id').count().reset_index().sort_values(by='ts', ascending=False)
 reply2.rename(columns={'parent_user_id': 'user', 'ts': 'replies_gen'}, inplace=True)
 reply2a = pd.merge(reply2, users[['id', 'real_name']], left_on='user', right_on='id', how='left')
@@ -150,7 +149,7 @@ st.pyplot(fig)
 
 # Q6
 st.markdown("### **Who generates the fastest replies?**")
-num_users6 = st.slider("Select the number of top users to display", 1, 20, 10, key="q6")
+num_users6 = st.slider("Select the number of top users to display", 1, 30, 10, key="q6")
 reply3 = data[['parent_user_id', 'thread_ts', 'ts']].dropna()
 reply3['reply_time'] = (reply3['thread_ts'] - reply3['ts']) / 60 * -1
 reply3 = reply3.groupby('parent_user_id')['reply_time'].mean().reset_index().sort_values(by='reply_time', ascending=True)
