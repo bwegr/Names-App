@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import re
 import ast
 from pandas import json_normalize
-import networkx
+import networkx as nx
 
 # Assuming 'data' and 'users' are DataFrame available in your context
 
