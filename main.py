@@ -29,7 +29,7 @@ def convert_string_to_dict(s):
 
 # Streamlit App
 st.title("BYU MBA Slack Data")
-st.write("The visualizations below correspond to all communication in public channels of the BYU MBA Slack workspace during the month of October 2023. Use the sliders to change how many of the top users for each category you wish to see")
+st.write("The visualizations below correspond to all communication in public channels of the BYU MBA Slack workspace during the month of October 2023. Use the sliders to change how many of the top users for each category you wish to see.")
 
 # Q1
 st.markdown("### **Who Reacts Most?**")
