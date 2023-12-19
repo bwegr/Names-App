@@ -33,7 +33,7 @@ st.write("The visualizations below correspond to all communication in public cha
 
 # Q1
 st.markdown("### **Who Reacts Most?**")
-num_users1 = st.slider("Select the number of top users to display", 1, 30, 10)
+num_users1 = st.slider("Select the number of top users to display", 1, 30, 10, key="q1"))
 react1 = pd.DataFrame(data[data['reactions'].notna()][['user', 'reactions']])
 react1['sum_counts'] = react1['reactions'].astype(str).apply(num_and_sum)
 react1a = react1.groupby('user')['sum_counts'].sum().reset_index()
@@ -64,7 +64,7 @@ st.pyplot(fig)
 
 # Q2
 st.markdown("### **What are the most popular emojis?**")
-num_emojis = st.slider("Select the number of top emojis to display", 1, 20, 10)
+num_emojis = st.slider("Select the number of top emojis to display", 1, 20, 10, key="q2")
 react2c = react2[['name', 'count']].groupby('name').count().reset_index().sort_values(by='count', ascending=False)
 paired = sorted(zip(react2c['count'][0:num_emojis], react2c['name'][0:num_emojis]))
 count_s, emoji_s = zip(*paired)
@@ -80,7 +80,7 @@ st.dataframe(react1a)
 
 # Q3
 st.markdown("### **Who generates the most reactions?**")
-num_users2 = st.slider("Select the number of top users to display", 1, 20, 10)
+num_users2 = st.slider("Select the number of top users to display", 1, 20, 10, key="q3a")
 react1b = pd.merge(react1a, users[['id', 'real_name']], left_on='user', right_on='id', how='left')
 react1c = react1b.sort_values(by='sum_counts', ascending=False)
 paired = sorted(zip(react1c['sum_counts'][0:num_users2], react1c['real_name'][0:num_users2]))
@@ -94,7 +94,7 @@ ax.set_ylabel('Name')
 ax.set_title('Top Reaction Generators - Total')
 st.pyplot(fig)
 
-num_users3 = st.slider("Select the number of top users to display", 1, 30, 10)
+num_users3 = st.slider("Select the number of top users to display", 1, 30, 10, key="q3b")
 mess1 = data[['user', 'ts']].groupby('user').count().reset_index().sort_values(by='ts', ascending=False).dropna()
 mess1.rename(columns={'ts': 'mess_count'}, inplace=True)
 react1a.rename(columns={'sum_counts': 'react_count'}, inplace=True)
@@ -116,7 +116,7 @@ st.pyplot(fig)
 
 # Q4
 st.markdown("### **Who replies to messages most?**")
-num_users4 = st.slider("Select the number of top users to display", 1, 20, 10)
+num_users4 = st.slider("Select the number of top users to display", 1, 20, 10, key="q4")
 reply = data[['user', 'parent_user_id']].dropna().groupby('user').count().reset_index().sort_values(by='parent_user_id', ascending=False)
 reply.rename(columns={'parent_user_id': 'reply_count'}, inplace=True)
 reply1 = pd.merge(reply, users[['id', 'real_name']], left_on='user', right_on='id', how='left')
@@ -133,7 +133,7 @@ st.pyplot(fig)
 
 # Q5
 st.markdown("### **Who generates the most replies?**")
-num_users5 = st.slider("Select the number of top users to display", 1, 20, 10)
+num_users5 = st.slider("Select the number of top users to display", 1, 20, 10, key="q5")
 reply2 = data[['parent_user_id', 'ts']].dropna().groupby('parent_user_id').count().reset_index().sort_values(by='ts', ascending=False)
 reply2.rename(columns={'parent_user_id': 'user', 'ts': 'replies_gen'}, inplace=True)
 reply2a = pd.merge(reply2, users[['id', 'real_name']], left_on='user', right_on='id', how='left')
