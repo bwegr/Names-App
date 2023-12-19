@@ -8,8 +8,8 @@ from pandas import json_normalize
 # Assuming 'data' and 'users' are DataFrame available in your context
 
 # Data extraction
-data = pd.DataFrame("https://raw.githubusercontent.com/bwegr/stat386project/main/all.csv")
-users = pd.DataFrame("https://raw.githubusercontent.com/bwegr/stat386project/main/all.csv") 
+data = pd.read_csv("https://raw.githubusercontent.com/bwegr/stat386project/main/all.csv")
+users = pd.read_csv("https://raw.githubusercontent.com/bwegr/stat386project/main/all.csv")
 
 # Function definitions
 def num_and_sum(s):
