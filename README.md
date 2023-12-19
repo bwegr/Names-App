@@ -1,1 +1,1 @@
-# Names-App
+# BYU MBA Slack Data Project
