@@ -93,7 +93,7 @@ ax.set_title('Top Reaction Generators - Total')
 st.pyplot(fig)
 
 num_users3 = st.slider("Select the number of top users to display", 1, 20, 10)
-mess1 = all0[['user', 'ts']].groupby('user').count().reset_index().sort_values(by='ts', ascending=False).dropna()
+mess1 = data[['user', 'ts']].groupby('user').count().reset_index().sort_values(by='ts', ascending=False).dropna()
 mess1.rename(columns={'ts': 'mess_count'}, inplace=True)
 react1a.rename(columns={'sum_counts': 'react_count'}, inplace=True)
 mess1a = pd.merge(pd.merge(react1a, mess1, on='user', how='left'), users[['id', 'real_name']], left_on='user', right_on='id', how='left')
@@ -114,8 +114,20 @@ st.pyplot(fig)
 
 # Q4
 st.markdown("### **Who replies to messages most?**")
+num_users4 = st.slider("Select the number of top users to display", 1, 20, 10)
+reply = data[['user', 'parent_user_id']].dropna().groupby('user').count().reset_index().sort_values(by='parent_user_id', ascending=False)
+reply.rename(columns={'parent_user_id': 'reply_count'}, inplace=True)
+reply1 = pd.merge(reply, users[['id', 'real_name']], left_on='user', right_on='id', how='left')
 
-
+paired = sorted(zip(reply1['reply_count'][0:num_users4], reply1['real_name'][0:num_users4]))
+count_s, user_s = zip(*paired)
+fig, ax = plt.subplots()
+ax.barh(user_s, count_s)
+for index, value in enumerate(count_s):
+    ax.text(value - 2.4, index, str(value), va='center')
+ax.set_ylabel('Name')
+ax.set_title('Top Repliers (Oct 2023)')
+st.pyplot(fig)
 
 # Q5
 st.markdown("### **Who generates the most replies?**")
