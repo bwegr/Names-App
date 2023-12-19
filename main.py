@@ -28,12 +28,10 @@ def convert_string_to_dict(s):
 
 # Streamlit App
 st.title("BYU MBA Slack Data")
-
 st.write("The visualizations below correspond to all communication in public channels of the BYU MBA Slack workspace during the month of October 2023. Use the sliders to change how many of the top users for each category you wish to see")
-# User input for the number of top users
-num_users1 = st.slider("Select the number of top users to display", 1, 50, 10)
 
-# Processing
+# Q1
+num_users1 = st.slider("Select the number of top users to display", 1, 50, 10)
 react1 = pd.DataFrame(data[data['reactions'].notna()][['user', 'reactions']])
 react1['sum_counts'] = react1['reactions'].astype(str).apply(num_and_sum)
 react1a = react1.groupby('user')['sum_counts'].sum().reset_index()
@@ -49,7 +47,6 @@ for i in list_of_dic:
 
 react2b = pd.merge(react2, users[['id', 'real_name']], left_on='users', right_on='id', how='left')
 
-# Visualization
 react2a = react2b[['real_name', 'count']].groupby('real_name').count().reset_index().sort_values(by='count', ascending=False)
 paired = sorted(zip(react2a['count'][0:num_users1], react2a['real_name'][0:num_users1]))
 count_s, users_s = zip(*paired)
@@ -61,12 +58,21 @@ for index, value in enumerate(count_s):
 plt.xlabel('Messages Reacted To')
 plt.ylabel('Name')
 plt.title('Top Reactors (Oct 2023)')
-
 st.pyplot(fig)
 
+# Q2
+num_emojis = st.slider("Select the number of top emojis to display", 1, 20, 10)
+react2c = react2[['name', 'count']].groupby('name').count().reset_index().sort_values(by='count', ascending=False)
+paired = sorted(zip(react2c['count'][0:num_emojis], react2c['name'][0:num_emojis]))
+count_s, emoji_s = zip(*paired)
 
-
-
+fig, ax = plt.subplots()
+ax.barh(emoji_s, count_s)
+for index, value in enumerate(count_s):
+    ax.text(value - 55, index, str(value), va='center')
+ax.set_ylabel('Emoji')
+ax.set_title('Top Emojis (Oct 2023)')
+st.pyplot(fig)
 
 
 
