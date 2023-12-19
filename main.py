@@ -126,13 +126,25 @@ ax.barh(user_s, count_s)
 for index, value in enumerate(count_s):
     ax.text(value - 2.4, index, str(value), va='center')
 ax.set_ylabel('Name')
-ax.set_title('Top Repliers (Oct 2023)')
+ax.set_title('Top Repliers')
 st.pyplot(fig)
 
 # Q5
 st.markdown("### **Who generates the most replies?**")
+num_users5 = st.slider("Select the number of top users to display", 1, 20, 10)
+reply2 = data[['parent_user_id', 'ts']].dropna().groupby('parent_user_id').count().reset_index().sort_values(by='ts', ascending=False)
+reply2.rename(columns={'parent_user_id': 'user', 'ts': 'replies_gen'}, inplace=True)
+reply2a = pd.merge(reply2, users[['id', 'real_name']], left_on='user', right_on='id', how='left')
+paired = sorted(zip(reply2a['replies_gen'][0:num_users5], reply2a['real_name'][0:num_users5]))
+count_s, user_s = zip(*paired)
 
-
+fig, ax = plt.subplots()
+ax.barh(user_s, count_s)
+for index, value in enumerate(count_s):
+    ax.text(value - 3.4, index, str(value), va='center')
+ax.set_ylabel('Name')
+ax.set_title('Top Reply Generators')
+st.pyplot(fig)
 
 # Q6
 st.markdown("### **Who generates the fastest replies?**")
