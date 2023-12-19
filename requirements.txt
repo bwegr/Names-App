@@ -1,5 +1,3 @@
 pandas
 streamlit
 matplotlib
-re
-ast
