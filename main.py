@@ -64,7 +64,7 @@ st.pyplot(fig)
 
 # Q2
 st.markdown("### **What are the most popular emojis?**")
-num_emojis = st.slider("", 1, 20, 10) #Select the number of top emojis to display
+num_emojis = st.slider("Select the number of top emojis to display", 1, 20, 10)
 react2c = react2[['name', 'count']].groupby('name').count().reset_index().sort_values(by='count', ascending=False)
 paired = sorted(zip(react2c['count'][0:num_emojis], react2c['name'][0:num_emojis]))
 count_s, emoji_s = zip(*paired)
@@ -94,7 +94,7 @@ ax.set_ylabel('Name')
 ax.set_title('Top Reaction Generators - Total')
 st.pyplot(fig)
 
-num_users3 = st.slider("Select the number of top users to display", 1, 20, 10)
+num_users3 = st.slider("Select the number of top users to display", 1, 30, 10)
 mess1 = data[['user', 'ts']].groupby('user').count().reset_index().sort_values(by='ts', ascending=False).dropna()
 mess1.rename(columns={'ts': 'mess_count'}, inplace=True)
 react1a.rename(columns={'sum_counts': 'react_count'}, inplace=True)
