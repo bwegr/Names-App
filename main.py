@@ -33,7 +33,7 @@ st.write("The visualizations below correspond to all communication in public cha
 
 # Q1
 st.markdown("### **Who Reacts Most?**")
-num_users1 = st.slider("Select the number of top users to display", 1, 30, 10, key="q1"))
+num_users1 = st.slider("Select the number of top users to display", 1, 30, 10, key="q1")
 react1 = pd.DataFrame(data[data['reactions'].notna()][['user', 'reactions']])
 react1['sum_counts'] = react1['reactions'].astype(str).apply(num_and_sum)
 react1a = react1.groupby('user')['sum_counts'].sum().reset_index()
